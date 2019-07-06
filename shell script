@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# login container with nsenter
+
+function docker_container_login(){
+
+    # name or id of docker container
+    DOCKER_CONTAINER_NAME_ID=$1
+
+    # get pid of docker container which in host
+    DOCKER_CONTAINER_PID=$(docker inspect -f "{{ .State.Pid }}" $DOCKER_CONTAINER_NAME_ID)
+
+    # login container with nsenter
+    nsenter -t $DOCKER_CONTAINER_PID -m -u -i -n -p
+}
+
+docker_container_login $1
